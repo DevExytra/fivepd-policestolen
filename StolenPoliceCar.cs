@@ -89,7 +89,7 @@ namespace TestCallout
             double randomValue = random.NextDouble();
 
             // Check if random number is less than or equal to spawn chance
-            return randomValue < spawnChance; // Use < instead of <=
+            return randomValue < spawnChance;
         }
         
     }
