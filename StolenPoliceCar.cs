@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.Remoting.Channels;
 using System.Threading.Tasks;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
@@ -31,18 +32,18 @@ namespace StolenPoliceVehicle
 
         public async override void OnStart(Ped player)
         {
-            suspect = await SpawnPed(RandomUtils.GetRandomPed(), Location + 1);
+            suspect = await World.CreatePed(RandomUtils.GetRandomPed(), Location + 1);
             suspect.AlwaysKeepTask = true;
             suspect.BlockPermanentEvents = true;
             
             if (SpawnChance())
             {
-                suspect2 = await SpawnPed(RandomUtils.GetRandomPed(), Location + 1);
+                suspect2 = await World.CreatePed(RandomUtils.GetRandomPed(), Location + 1);
                 suspect2.AlwaysKeepTask = true;
                 suspect2.BlockPermanentEvents = true;
                 
                 // Spawns the car with bot suspects
-                car = await SpawnVehicle(VehicleHash.Police, Location);
+                car = await World.CreateVehicle(VehicleHash.Police, Location);
                 suspect.SetIntoVehicle(car, VehicleSeat.Driver);
                 suspect2.SetIntoVehicle(car, VehicleSeat.Passenger);
                 
@@ -59,7 +60,7 @@ namespace StolenPoliceVehicle
             else
             {
                 
-                car = await SpawnVehicle(VehicleHash.Police, Location);
+                car = await World.CreateVehicle(VehicleHash.Police, Location);
                 suspect.SetIntoVehicle(car, VehicleSeat.Driver);
                 
                 // Sets the suspect to flee 
@@ -76,28 +77,48 @@ namespace StolenPoliceVehicle
             car.AttachBlip();
         }
 
-        // This Simply deletes the Suspects 
-        public override void OnCancelBefore()
-        {
-            if (suspect != null && suspect.Exists())
-                suspect.Delete();
-            if (suspect2 != null && suspect2.Exists())
-                suspect2.Delete();
-            if (car != null && car.Exists())
-                car.Delete();
-        }
-
-        // This Simply deletes the Suspects 
+        // Grandpa Rex gave me this <3
         public override void OnCancelAfter()
         {
-            if (suspect != null && suspect.Exists())
-                suspect.Delete();
-            if (suspect2 != null && suspect2.Exists())
-                suspect2.Delete();
-            if (car != null && car.Exists())
-                car.Delete();
+            base.OnCancelAfter();
+            
+            try
+            {
+                if (!suspect.IsAlive || suspect.IsCuffed) return;
+                suspect.Task.WanderAround(); suspect.AlwaysKeepTask = false; suspect.BlockPermanentEvents = false;
+            }
+            catch { EndCallout(); }
+
+            try
+            {
+                if (!suspect2.IsAlive || suspect2.IsCuffed) return;
+                suspect2.Task.WanderAround(); suspect2.AlwaysKeepTask = false; suspect2.BlockPermanentEvents = false;
+            }
+            catch { EndCallout(); }
+            
         }
 
+        // Grandpa Rex gave me this <3
+        public override void OnCancelBefore()
+        {
+            base.OnCancelBefore();
+
+            try
+            {
+                if (!suspect.IsAlive || suspect.IsCuffed) return;
+                suspect.Task.WanderAround(); suspect.AlwaysKeepTask = false; suspect.BlockPermanentEvents = false;
+            }
+            catch { EndCallout(); }
+
+            try
+            {
+                if (!suspect2.IsAlive || suspect2.IsCuffed) return;
+                suspect2.Task.WanderAround(); suspect2.AlwaysKeepTask = false; suspect2.BlockPermanentEvents = false;
+            }
+            catch { EndCallout(); }
+        }
+        
+        // Nice Hashing
         private WeaponHash getRandomWeapon()
         {
             List<WeaponHash> weapons = new List<WeaponHash>
