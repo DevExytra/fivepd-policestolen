@@ -1,0 +1,11 @@
+C:\Users\Maurice\RiderProjects\TestCallout\TestCallout\bin\Debug\TestCallout.net.dll
+C:\Users\Maurice\RiderProjects\TestCallout\TestCallout\bin\Debug\TestCallout.net.pdb
+C:\Users\Maurice\RiderProjects\TestCallout\TestCallout\bin\Debug\CitizenFX.Core.Client.dll
+C:\Users\Maurice\RiderProjects\TestCallout\TestCallout\bin\Debug\FivePD.net.dll
+C:\Users\Maurice\RiderProjects\TestCallout\TestCallout\bin\Debug\CitizenFX.Core.Client.xml
+C:\Users\Maurice\RiderProjects\TestCallout\TestCallout\bin\Debug\FivePD.net.xml
+C:\Users\Maurice\RiderProjects\TestCallout\TestCallout\obj\Debug\TestCallout.csproj.AssemblyReference.cache
+C:\Users\Maurice\RiderProjects\TestCallout\TestCallout\obj\Debug\TestCallout.csproj.CoreCompileInputs.cache
+C:\Users\Maurice\RiderProjects\TestCallout\TestCallout\obj\Debug\TestCallout.csproj.CopyComplete
+C:\Users\Maurice\RiderProjects\TestCallout\TestCallout\obj\Debug\TestCallout.net.dll
+C:\Users\Maurice\RiderProjects\TestCallout\TestCallout\obj\Debug\TestCallout.net.pdb
