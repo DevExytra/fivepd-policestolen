@@ -1,11 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using CitizenFX.Core;
 using CitizenFX.Core.Native;
 using FivePD.API.Utils;
 using FivePD.API;
 
-namespace TestCallout
+namespace StolenPoliceVehicle
 {
     [CalloutProperties("Stolen Police Car", "ERLS Team", "1.0")]
     public class StolenPoliceCar : Callout
@@ -13,6 +14,8 @@ namespace TestCallout
         private Vehicle car;
         private Ped suspect;
         private Ped suspect2;
+
+        private readonly Random rnd = new Random();
 
         public StolenPoliceCar()
         {
@@ -44,10 +47,11 @@ namespace TestCallout
                 suspect2.SetIntoVehicle(car, VehicleSeat.Passenger);
                 
                 // Gives suspect 2 the weapon
-                API.GiveWeaponToPed(suspect2.GetHashCode(), 0x22D8FE39, 100, false, true);
+                suspect2.Weapons.Give(getRandomWeapon(), 100, true, true);
                 suspect2.Task.VehicleShootAtPed(player);
                 // Makes the Driver flee from the player
                 suspect.Task.FleeFrom(player);
+                car.IsSirenActive = true;
                 
                 // Registers the suspect if spawned
                 Pursuit.RegisterPursuit(suspect2);
@@ -58,8 +62,9 @@ namespace TestCallout
                 car = await SpawnVehicle(VehicleHash.Police, Location);
                 suspect.SetIntoVehicle(car, VehicleSeat.Driver);
                 
-                // Sets the suspect to flee
+                // Sets the suspect to flee 
                 API.SetDriveTaskDrivingStyle(suspect.GetHashCode(), 524852);
+                car.IsSirenActive = true;
                 suspect.Task.FleeFrom(player);
 
                 // Registers suspect 1
@@ -71,12 +76,43 @@ namespace TestCallout
             car.AttachBlip();
         }
 
+        // This Simply deletes the Suspects 
+        public override void OnCancelBefore()
+        {
+            if (suspect != null && suspect.Exists())
+                suspect.Delete();
+            if (suspect2 != null && suspect2.Exists())
+                suspect2.Delete();
+            if (car != null && car.Exists())
+                car.Delete();
+        }
+
+        // This Simply deletes the Suspects 
+        public override void OnCancelAfter()
+        {
+            if (suspect != null && suspect.Exists())
+                suspect.Delete();
+            if (suspect2 != null && suspect2.Exists())
+                suspect2.Delete();
+            if (car != null && car.Exists())
+                car.Delete();
+        }
+
+        private WeaponHash getRandomWeapon()
+        {
+            List<WeaponHash> weapons = new List<WeaponHash>
+            {
+                WeaponHash.APPistol
+            };
+            return weapons[rnd.Next(weapons.Count)];
+        }
+
         public async override Task OnAccept()
         {
             InitBlip();
             UpdateData();
         }
-
+        
         private bool SpawnChance()
         {
             // This is the randomizing amount
@@ -90,7 +126,6 @@ namespace TestCallout
 
             // Check if random number is less than or equal to spawn chance
             return randomValue < spawnChance;
-        }
-        
-    }
+         }
+     }
 }
