@@ -79,7 +79,8 @@ namespace TestCallout
 
         private bool SpawnChance()
         {
-            double spawnChance = 0.5;
+            // This is the randomizing amount
+            double spawnChance = 0.3;
 
             // Initialize random number generator
             Random random = new Random();
