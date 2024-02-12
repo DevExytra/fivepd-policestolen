@@ -8,7 +8,7 @@ using FivePD.API;
 
 namespace StolenPoliceVehicle
 {
-    [CalloutProperties("Stolen Emergency Vehicle", "ERLS Team", "1.3")]
+    [CalloutProperties("Stolen Emergency Vehicle", "ERLS Team", "1.2")]
     public class StolenPoliceCar : Callout
     {
         private Vehicle _car;
