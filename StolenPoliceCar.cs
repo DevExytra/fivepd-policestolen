@@ -11,10 +11,10 @@ namespace StolenPoliceVehicle
     [CalloutProperties("Stolen Emergency Vehicle", "ERLS Team", "1.2")]
     public class StolenPoliceCar : Callout
     {
+        private static readonly Random _rnd = new Random();
         private Vehicle _car;
         private Ped _driver;
         private Ped _shooter;
-        private readonly Random _rnd = new Random();
 
         public StolenPoliceCar()
         {
@@ -193,8 +193,7 @@ namespace StolenPoliceVehicle
 
         static bool SpawnChance(double chance)
         {
-            Random random = new Random();
-            double randomNumber = random.NextDouble();
+            double randomNumber = _rnd.NextDouble();
             return randomNumber < chance;
         }
     }
