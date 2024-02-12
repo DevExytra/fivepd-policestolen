@@ -153,6 +153,21 @@ namespace StolenPoliceVehicle
             UpdateData();
         }
         
+        public override void OnCancelBefore()
+        {
+            // Clears the Driver
+            base.OnCancelBefore();
+            if (!_driver.IsAlive && !_shooter.IsAlive || _driver.IsCuffed && _shooter.IsCuffed) return;
+            _driver.Task.WanderAround();
+            _driver.AlwaysKeepTask = false;
+            _driver.BlockPermanentEvents = false;
+            
+            // Clears the Shooter
+            _shooter.Task.WanderAround();
+            _shooter.AlwaysKeepTask = false;
+            _shooter.BlockPermanentEvents = false;
+        }   
+        
         // Thanks to Grandpa Rex!
         public override void OnCancelAfter()
         {
@@ -175,22 +190,6 @@ namespace StolenPoliceVehicle
                 EndCallout();
             }
         }
-
-        // Thanks to Grandpa Rex!
-        public override void OnCancelBefore()
-        {
-            // Clears the Driver
-            base.OnCancelBefore();
-            if (!_driver.IsAlive && !_shooter.IsAlive || _driver.IsCuffed && _shooter.IsCuffed) return;
-            _driver.Task.WanderAround();
-            _driver.AlwaysKeepTask = false;
-            _driver.BlockPermanentEvents = false;
-            
-            // Clears the Shooter
-            _shooter.Task.WanderAround();
-            _shooter.AlwaysKeepTask = false;
-            _shooter.BlockPermanentEvents = false;
-        }        
 
         static bool SpawnChance(double chance)
         {
