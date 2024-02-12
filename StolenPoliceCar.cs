@@ -8,7 +8,7 @@ using FivePD.API;
 
 namespace StolenPoliceVehicle
 {
-    [CalloutProperties("Stolen Emergency Vehicle", "ERLS Team", "1.2")]
+    [CalloutProperties("Stolen Emergency Vehicle", "ERLS Team", "1.3")]
     public class StolenPoliceCar : Callout
     {
         private static readonly Random _rnd = new Random();
@@ -25,7 +25,7 @@ namespace StolenPoliceVehicle
             ShortName = "Stolen Police Car";
             CalloutDescription = "A Police Car is gone";
             ResponseCode = 3;
-            StartDistance = 150f;
+            StartDistance = 160f;
         }
 
         // Gets a random weapon out of this list
@@ -69,7 +69,15 @@ namespace StolenPoliceVehicle
                 PedHash.Brad,
                 PedHash.Hao,
                 PedHash.Barry,
-                PedHash.Nigel
+                PedHash.Nigel,
+                PedHash.AfriAmer01AMM,
+                PedHash.Cletus,
+                PedHash.Dale,
+                PedHash.Franklin,
+                PedHash.Floyd,
+                PedHash.DoaMan, 
+                PedHash.TaoCheng,
+                PedHash.Trevor
             };
             return ped[_rnd.Next(ped.Count)];
         }
@@ -79,6 +87,14 @@ namespace StolenPoliceVehicle
         {
             List<PedHash> ped = new List<PedHash>
             {
+                PedHash.Abigail,
+                PedHash.Clay,
+                PedHash.Andreas,
+                PedHash.Bankman01,
+                PedHash.Brad,
+                PedHash.Hao,
+                PedHash.Barry,
+                PedHash.Nigel,
                 PedHash.AfriAmer01AMM,
                 PedHash.Cletus,
                 PedHash.Dale,
@@ -94,7 +110,7 @@ namespace StolenPoliceVehicle
 
         public async override void OnStart(Ped player)
         {
-            double chance = 0.75;
+            double chance = 0.16;
             bool spawn = SpawnChance(chance);
 
             if (spawn)
@@ -157,15 +173,18 @@ namespace StolenPoliceVehicle
         {
             // Clears the Driver
             base.OnCancelBefore();
-            if (!_driver.IsAlive && !_shooter.IsAlive || _driver.IsCuffed && _shooter.IsCuffed) return;
+            if (_driver == null || (_shooter == null || !_shooter.IsAlive && !_driver.IsAlive) || _driver.IsCuffed && (_shooter == null || _shooter.IsCuffed)) return;
             _driver.Task.WanderAround();
             _driver.AlwaysKeepTask = false;
             _driver.BlockPermanentEvents = false;
             
             // Clears the Shooter
-            _shooter.Task.WanderAround();
-            _shooter.AlwaysKeepTask = false;
-            _shooter.BlockPermanentEvents = false;
+            if (_shooter != null)
+            {
+                _shooter.Task.WanderAround();
+                _shooter.AlwaysKeepTask = false;
+                _shooter.BlockPermanentEvents = false;
+            }
         }   
         
         // Thanks to Grandpa Rex!
@@ -175,15 +194,18 @@ namespace StolenPoliceVehicle
             try
             {
                 // Clears the driver
-                if (!_driver.IsAlive && !_shooter.IsAlive || _driver.IsCuffed && _shooter.IsCuffed) return;
+                if (_driver == null || (_shooter == null || !_shooter.IsAlive && !_driver.IsAlive) || _driver.IsCuffed && (_shooter == null || _shooter.IsCuffed)) return;
                 _driver.Task.WanderAround();
                 _driver.AlwaysKeepTask = false;
                 _driver.BlockPermanentEvents = false;
                 
                 // Clears the Shooter
-                _shooter.Task.WanderAround();
-                _shooter.AlwaysKeepTask = false;
-                _shooter.BlockPermanentEvents = false;
+                if (_shooter != null)
+                {
+                    _shooter.Task.WanderAround();
+                    _shooter.AlwaysKeepTask = false;
+                    _shooter.BlockPermanentEvents = false;   
+                }
             }
             catch
             {
