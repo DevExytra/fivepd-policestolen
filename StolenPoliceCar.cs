@@ -163,10 +163,11 @@ namespace StolenPoliceVehicle
             }
         }
         
-        public async override Task OnAccept()
+        public override Task OnAccept()
         {
             InitBlip();
             UpdateData();
+            return base.OnAccept();
         }
         
         public override void OnCancelBefore()
